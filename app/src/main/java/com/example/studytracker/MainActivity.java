@@ -1,15 +1,9 @@
 package com.example.studytracker;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
