@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/txtCapitoloNome"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Nome Capitolo"
+        android:textSize="16sp" />
+
+    <ImageButton
+        android:id="@+id/btnEliminaCapitolo"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@android:drawable/ic_delete"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="Elimina Capitolo"/>
+</LinearLayout>

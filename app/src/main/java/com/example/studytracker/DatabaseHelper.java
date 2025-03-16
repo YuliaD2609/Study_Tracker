@@ -5,7 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "study_tracker.db";
@@ -116,5 +119,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return stati;
     }
+
+    public String getNomeMateria(int materiaId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String nomeMateria = "Materia Sconosciuta";  // Default nel caso non venga trovata
+
+        Cursor cursor = db.rawQuery("SELECT nome FROM Materie WHERE id = ?", new String[]{String.valueOf(materiaId)});
+        if (cursor.moveToFirst()) {
+            nomeMateria = cursor.getString(0);
+        }
+        cursor.close();
+        return nomeMateria;
+    }
+
+    /*** 📌 7. Metodo per ottenere tutti i capitoli di una materia ***/
+    public ArrayList<Capitolo> getCapitoli(int materiaId) {
+        ArrayList<Capitolo> listaCapitoli = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT id, materia_id, nome, stato FROM Capitoli WHERE materia_id = ?",
+                new String[]{String.valueOf(materiaId)}
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                int mId = cursor.getInt(1);
+                String nome = cursor.getString(2);
+                int stato = cursor.getInt(3);
+
+                Capitolo capitolo = new Capitolo(id, mId, nome, stato);
+                listaCapitoli.add(capitolo);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return listaCapitoli;
+    }
+
 
 }

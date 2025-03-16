@@ -11,9 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
     private DatabaseHelper dbHelper;
     private ListView listView;
     private ArrayAdapter<String> adapter;
@@ -24,6 +26,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
 
         dbHelper = new DatabaseHelper(this);
         listView = findViewById(R.id.listMaterie);
@@ -42,7 +47,7 @@ public class MainActivity extends Activity {
 
         findViewById(R.id.btnAggiungiMateria).setOnClickListener(v -> {
             EditText input = new EditText(this);
-            new AlertDialog.Builder(this)
+            new androidx.appcompat.app.AlertDialog.Builder(MainActivity.this)
                     .setTitle("Aggiungi Materia")
                     .setView(input)
                     .setPositiveButton("Salva", (dialog, which) -> {
