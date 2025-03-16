@@ -50,17 +50,7 @@ public class CapitoliActivity extends AppCompatActivity {
         caricaCapitoli();
 
         findViewById(R.id.btnAggiungiCapitolo).setOnClickListener(v -> {
-            EditText input = new EditText(this);
-            new androidx.appcompat.app.AlertDialog.Builder(CapitoliActivity.this)
-                    .setTitle("Aggiungi Capitolo")
-                    .setView(input)
-                    .setPositiveButton("Salva", (dialog, which) -> {
-                        aggiungiCapitolo(input.getText().toString());
-                        caricaCapitoli();
-                        aggiornaGrafico();
-                    })
-                    .setNegativeButton("Annulla", null)
-                    .show();
+            mostraDialogAggiungiCapitoli();
         });
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
@@ -72,6 +62,26 @@ public class CapitoliActivity extends AppCompatActivity {
             aggiornaGrafico();
         }
 
+    }
+
+    private void mostraDialogAggiungiCapitoli() {
+        // Crea un AlertDialog con un EditText per l'inserimento dei capitoli
+        final android.widget.EditText input = new android.widget.EditText(this);
+        input.setHint("Inserisci i capitoli separati da virgola");
+
+        new AlertDialog.Builder(this)
+                .setTitle("Aggiungi Capitoli")
+                .setMessage("Inserisci i capitoli separati da una virgola (es: Capitolo 1,Capitolo 2)")
+                .setView(input)
+                .setPositiveButton("Salva", (dialog, which) -> {
+                    String capitoliText = input.getText().toString().trim();
+                    if (!capitoliText.isEmpty()) {
+                        aggiungiCapitolo(capitoliText);
+                        caricaCapitoli(); // Ricarica la lista dei capitoli
+                    }
+                })
+                .setNegativeButton("Annulla", null)
+                .show();
     }
 
     public static void caricaCapitoli() {
@@ -88,8 +98,14 @@ public class CapitoliActivity extends AppCompatActivity {
     }
 
 
-    private void aggiungiCapitolo(String nome) {
-        dbHelper.aggiungiCapitolo(materiaId, nome, 0);
+    private void aggiungiCapitolo(String capitoliText) {
+        String[] capitoli = capitoliText.split(",");
+
+        for (String capitoloNome : capitoli) {
+            if (!capitoloNome.trim().isEmpty()) { // Se il capitolo non è vuoto
+                dbHelper.aggiungiCapitolo(materiaId, capitoloNome, 0);
+            }
+        }
     }
 
     private void mostraOpzioniCapitolo(int capitoloId) {
