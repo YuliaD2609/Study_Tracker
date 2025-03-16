@@ -17,9 +17,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private DatabaseHelper dbHelper;
-    private ListView listView;
-    private ArrayAdapter<String> adapter;
-    private ArrayList<String> materieList;
+    private ListView listViewMaterie;
+    private MateriaAdapter adapter;
+    private ArrayList<Materia> materieList = new ArrayList<>();
     private ArrayList<Integer> materieIdList;
 
     @Override
@@ -31,19 +31,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         dbHelper = new DatabaseHelper(this);
-        listView = findViewById(R.id.listMaterie);
-        materieList = new ArrayList<>();
-        materieIdList = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, materieList);
-        listView.setAdapter(adapter);
+        listViewMaterie = findViewById(R.id.listViewMaterie);
+        adapter = new MateriaAdapter(this, materieList);
+        listViewMaterie.setAdapter(adapter);
 
         caricaMaterie();
-
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            Intent intent = new Intent(MainActivity.this, CapitoliActivity.class);
-            intent.putExtra("materia_id", materieIdList.get(position));
-            startActivity(intent);
-        });
 
         findViewById(R.id.btnAggiungiMateria).setOnClickListener(v -> {
             EditText input = new EditText(this);
@@ -61,14 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void caricaMaterie() {
         materieList.clear();
-        materieIdList.clear();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT id, nome FROM Materie", null);
-        while (cursor.moveToNext()) {
-            materieIdList.add(cursor.getInt(0));
-            materieList.add(cursor.getString(1));
-        }
-        cursor.close();
+        materieList.addAll(dbHelper.getMaterie());
         adapter.notifyDataSetChanged();
     }
 

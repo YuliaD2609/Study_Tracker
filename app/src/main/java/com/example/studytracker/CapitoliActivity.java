@@ -3,6 +3,7 @@ package com.example.studytracker;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -175,6 +176,9 @@ public class CapitoliActivity extends AppCompatActivity {
         pieChartView.setDataWithLabels(datiFiltrati, coloriFiltrati, labelsFiltrati);
     }
 
-
+    public void goToHome(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
 }
 

@@ -157,5 +157,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return listaCapitoli;
     }
 
-
+    public List<Materia> getMaterie() {
+        List<Materia> lista = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT id, nome FROM Materie", null);
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                String nome = cursor.getString(1);
+                lista.add(new Materia(id, nome));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return lista;
+    }
 }

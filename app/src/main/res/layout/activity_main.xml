@@ -10,13 +10,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Materie"
+
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
-        android:paddingBottom="10dp"/>
+        android:paddingBottom="10dp"
+
+        android:layout_marginTop="10dp"/>
 
     <ListView
-        android:id="@+id/listMaterie"
+        android:id="@+id/listViewMaterie"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -28,5 +32,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Aggiungi Materia"
-        android:backgroundTint="@color/blue"/>
+        android:backgroundTint="@color/blue"
+        android:layout_marginBottom="10dp"/>
 </LinearLayout>

@@ -6,6 +6,19 @@
     android:padding="16dp"
 
     android:background="@color/light_blue">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+    <ImageView
+        android:id="@+id/homeImage"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="30dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="goToHome"
+        android:src="@drawable/home_icon" />
 
     <TextView
         android:id="@+id/nomeMateria"
@@ -14,8 +27,10 @@
         android:text="Capitoli della Materia"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
+        android:textColor="@color/colorPrimaryDark"
+        android:gravity="center_horizontal"
         android:paddingBottom="10dp"/>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/listCapitoli"
@@ -37,5 +52,6 @@
         android:id="@+id/pieChartView"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"/>
 </LinearLayout>
