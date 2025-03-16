@@ -162,10 +162,10 @@ public class CapitoliActivity extends AppCompatActivity {
         );
 
         List<Integer> coloriCompleti = Arrays.asList(
-                Color.parseColor("#F2548B"), // Rosso per Non fatto
-                Color.parseColor("#FFF690"), // Giallo per Appuntato
-                Color.parseColor("#FA98FF8D"), // Verde per Studiato
-                Color.parseColor("#FA8DDDFF")  // Blu per Esercizi
+                Color.parseColor("#F8A6A6"), // Rosso per Non fatto
+                Color.parseColor("#F9E28B"), // Giallo per Appuntato
+                Color.parseColor("#A2E8B7"), // Verde per Studiato
+                Color.parseColor("#A7C9F9")  // Blu per Esercizi
         );
 
         List<String> labelsCompleti = Arrays.asList(
