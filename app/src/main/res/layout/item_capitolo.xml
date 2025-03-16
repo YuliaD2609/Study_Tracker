@@ -12,6 +12,14 @@
         android:text="Nome Capitolo"
         android:textSize="16sp" />
 
+    <TextView
+        android:id="@+id/textStato"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Stato"
+        android:textSize="16sp" />
+
     <ImageButton
         android:id="@+id/btnEliminaCapitolo"
         android:layout_width="15dp"

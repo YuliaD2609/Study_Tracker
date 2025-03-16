@@ -14,6 +14,7 @@ public class PieChartView extends View {
     private Paint paint;
     private List<Float> values;
     private List<Integer> colors;
+    private List<String> labels;
 
     public PieChartView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -34,18 +35,42 @@ public class PieChartView extends View {
         if (values == null || values.isEmpty()) return;
 
         float total = 0;
-        for (Float value : values) {
-            total += value;
-        }
+        for (Float val : values) total += val;
+        if (total == 0) total = 1; // Evita divisione per zero
 
+        RectF rectF = new RectF(0, 0, getWidth(), getHeight());
         float startAngle = 0;
-        RectF rect = new RectF(50, 50, getWidth() - 50, getHeight() - 50);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        textPaint.setColor(Color.BLACK);
+        textPaint.setTextSize(40);
+        textPaint.setTextAlign(Paint.Align.CENTER);
 
         for (int i = 0; i < values.size(); i++) {
             float sweepAngle = (values.get(i) / total) * 360;
             paint.setColor(colors.get(i));
-            canvas.drawArc(rect, startAngle, sweepAngle, true, paint);
+            canvas.drawArc(rectF, startAngle, sweepAngle, true, paint);
+
+            // Calcolo posizione per l'etichetta
+            float angle = startAngle + sweepAngle / 2;
+            float radius = getWidth() / 3; // Puoi regolare il raggio
+            float x = (float) (getWidth() / 2 + radius * Math.cos(Math.toRadians(angle)));
+            float y = (float) (getHeight() / 2 + radius * Math.sin(Math.toRadians(angle)));
+
+            // Disegna etichetta
+            if (labels != null && !labels.get(i).isEmpty()) {
+                canvas.drawText(labels.get(i), x, y, textPaint);
+            }
+
             startAngle += sweepAngle;
         }
     }
+
+    public void setDataWithLabels(List<Float> data, List<Integer> colors, List<String> labels) {
+        this.values = data;
+        this.colors = colors;
+        this.labels = labels; // Salva anche le etichette
+        invalidate(); // Ridisegna il grafico
+    }
+
 }

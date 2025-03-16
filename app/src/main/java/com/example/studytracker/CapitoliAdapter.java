@@ -53,6 +53,12 @@ public class CapitoliAdapter extends BaseAdapter {
         txtCapitoloNome.setOnClickListener(v -> {
             mostraOpzioniCapitolo(capitolo.getId());
         });
+        TextView txtStato = convertView.findViewById(R.id.textStato);
+        txtStato.setText(getStatoText(capitolo.getStato()));
+
+        txtStato.setOnClickListener(v -> {
+            mostraOpzioniCapitolo(capitolo.getId());
+        });
 
         // Gestisce il click per eliminare il capitolo
         btnEliminaCapitolo.setOnClickListener(v -> {
@@ -70,6 +76,15 @@ public class CapitoliAdapter extends BaseAdapter {
         });
 
         return convertView;
+    }
+
+    private String getStatoText(int stato) {
+        switch (stato) {
+            case 1: return "Appuntato";
+            case 2: return "Studiato";
+            case 3: return "Esercizi";
+            default: return "Non fatto";
+        }
     }
 
     private void mostraOpzioniCapitolo(int capitoloId) {

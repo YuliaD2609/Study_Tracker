@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class CapitoliActivity extends AppCompatActivity {
     private static DatabaseHelper dbHelper;
@@ -124,11 +125,56 @@ public class CapitoliActivity extends AppCompatActivity {
         int studiato = stati.get(2);
         int esercizi = stati.get(3);
 
-        pieChartView.setData(
-                Arrays.asList((float) nonFatto, (float) appuntato, (float) studiato, (float) esercizi),
-                Arrays.asList(Color.GRAY, Color.YELLOW, Color.GREEN, Color.BLUE)
+        int totale = nonFatto + appuntato + studiato + esercizi;
+
+        // Evita divisione per 0
+        if (totale == 0) totale = 1;
+
+        // Percentuali per le etichette
+        float percNonFatto = (nonFatto * 100f) / totale;
+        float percAppuntato = (appuntato * 100f) / totale;
+        float percStudiato = (studiato * 100f) / totale;
+        float percEsercizi = (esercizi * 100f) / totale;
+
+        // Liste complete
+        List<Float> datiCompleti = Arrays.asList(
+                (float) nonFatto,
+                (float) appuntato,
+                (float) studiato,
+                (float) esercizi
         );
+
+        List<Integer> coloriCompleti = Arrays.asList(
+                Color.parseColor("#F2548B"), // Rosso per Non fatto
+                Color.parseColor("#FFF690"), // Giallo per Appuntato
+                Color.parseColor("#FA98FF8D"), // Verde per Studiato
+                Color.parseColor("#FA8DDDFF")  // Blu per Esercizi
+        );
+
+        List<String> labelsCompleti = Arrays.asList(
+                "Non fatto: " + String.format("%.1f", percNonFatto) + "%",
+                "Appuntato: " + String.format("%.1f", percAppuntato) + "%",
+                "Studiato: " + String.format("%.1f", percStudiato) + "%",
+                "Esercizi: " + String.format("%.1f", percEsercizi) + "%"
+        );
+
+        // 🔎 Filtra solo quelli con valore > 0
+        List<Float> datiFiltrati = new ArrayList<>();
+        List<Integer> coloriFiltrati = new ArrayList<>();
+        List<String> labelsFiltrati = new ArrayList<>();
+
+        for (int i = 0; i < datiCompleti.size(); i++) {
+            if (datiCompleti.get(i) > 0) {
+                datiFiltrati.add(datiCompleti.get(i));
+                coloriFiltrati.add(coloriCompleti.get(i));
+                labelsFiltrati.add(labelsCompleti.get(i));
+            }
+        }
+
+        // Passa solo i dati filtrati al PieChartView
+        pieChartView.setDataWithLabels(datiFiltrati, coloriFiltrati, labelsFiltrati);
     }
+
 
 }
 
