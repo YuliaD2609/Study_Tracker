@@ -34,4 +34,11 @@
         android:text="Aggiungi Materia"
         android:backgroundTint="@color/blue"
         android:layout_marginBottom="10dp"/>
+
+    <com.example.studytracker.PieChartView
+        android:id="@+id/pieChartView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"/>
 </LinearLayout>
