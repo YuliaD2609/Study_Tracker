@@ -43,7 +43,7 @@ public class PieChartView extends View {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setColor(Color.BLACK);
-        textPaint.setTextSize(40);
+        textPaint.setTextSize(30);
         textPaint.setTextAlign(Paint.Align.CENTER);
 
         for (int i = 0; i < values.size(); i++) {

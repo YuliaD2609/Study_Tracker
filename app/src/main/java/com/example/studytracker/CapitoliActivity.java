@@ -119,15 +119,6 @@ public class CapitoliActivity extends AppCompatActivity {
                 .show();
     }
 
-    private String getStatoText(int stato) {
-        switch (stato) {
-            case 1: return "Appuntato";
-            case 2: return "Studiato";
-            case 3: return "Esercizi";
-            default: return "Non fatto";
-        }
-    }
-
     public static void aggiornaGrafico() {
         HashMap<Integer, Integer> stati = dbHelper.getConteggioStatiCapitoli(materiaId);
 
