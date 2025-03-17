@@ -248,8 +248,8 @@ public class CapitoliActivity extends AppCompatActivity {
         );
 
         List<String> labelsCompleti = Arrays.asList(
-                "Esercizi da fare: " + String.format("%.1f", percDaFare) + "%",
-                "Esercizi fatti: " + String.format("%.1f", percFatti) + "%"
+                "Esercizi: " + String.format("%.1f", percDaFare) + "%",
+                "Fatti: " + String.format("%.1f", percFatti) + "%"
         );
 
         // 🔎 Filtra solo quelli con valore > 0
