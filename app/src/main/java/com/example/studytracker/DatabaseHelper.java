@@ -20,16 +20,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE Materie (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT)");
+        db.execSQL("CREATE TABLE Capitoli (\n" +
+                "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                "    materia_id INTEGER,\n" +
+                "    nome TEXT,\n" +
+                "    stato INTEGER,\n" +
+                "    ha_esercizi INTEGER DEFAULT 0, -- 0=no, 1=sì\n" +
+                "    esercizi_fatti INTEGER DEFAULT 0, -- 0=no, 1=sì\n" +
+                "    FOREIGN KEY(materia_id) REFERENCES Materie(id)\n" +
+                ");\n");
         db.execSQL("CREATE TABLE Capitoli (id INTEGER PRIMARY KEY AUTOINCREMENT, materia_id INTEGER, nome TEXT, stato INTEGER, FOREIGN KEY(materia_id) REFERENCES Materie(id))");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS Capitoli");
-        db.execSQL("DROP TABLE IF EXISTS Materie");
-        onCreate(db);
+        if (oldVersion < 2) {
+            db.execSQL("ALTER TABLE Capitoli ADD COLUMN ha_esercizi INTEGER DEFAULT 0");
+            db.execSQL("ALTER TABLE Capitoli ADD COLUMN esercizi_fatti INTEGER DEFAULT 0");
+        }
     }
+
 
     /*** 📌 1. Metodo per aggiungere una nuova materia ***/
     public long aggiungiMateria(String nome) {
@@ -46,8 +56,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("materia_id", materiaId);
         values.put("nome", nome);
         values.put("stato", stato);
+        values.put("ha_esercizi", 0); // Di default senza esercizi
+        values.put("esercizi_fatti", 0); // Di default non fatti
         return db.insert("Capitoli", null, values);
     }
+
 
     /*** 📌 3. Metodo per aggiornare lo stato di un capitolo ***/
     public void aggiornaStatoCapitolo(int capitoloId, int stato) {
@@ -134,27 +147,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     /*** 📌 7. Metodo per ottenere tutti i capitoli di una materia ***/
     public ArrayList<Capitolo> getCapitoli(int materiaId) {
-        ArrayList<Capitolo> listaCapitoli = new ArrayList<>();
+        ArrayList<Capitolo> capitoli = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.rawQuery(
-                "SELECT id, materia_id, nome, stato FROM Capitoli WHERE materia_id = ?",
-                new String[]{String.valueOf(materiaId)}
-        );
+        Cursor cursor = db.rawQuery("SELECT id, nome, stato, ha_esercizi, esercizi_fatti FROM Capitoli WHERE materia_id = ?", new String[]{String.valueOf(materiaId)});
 
         if (cursor.moveToFirst()) {
             do {
-                int id = cursor.getInt(0);
-                int mId = cursor.getInt(1);
-                String nome = cursor.getString(2);
-                int stato = cursor.getInt(3);
-
-                Capitolo capitolo = new Capitolo(id, mId, nome, stato);
-                listaCapitoli.add(capitolo);
+                Capitolo c = new Capitolo(
+                        cursor.getInt(0), // id
+                        cursor.getString(1), // nome
+                        cursor.getInt(2), // stato
+                        cursor.getInt(3), // ha_esercizi
+                        cursor.getInt(4)  // esercizi_fatti
+                );
+                capitoli.add(c);
             } while (cursor.moveToNext());
         }
         cursor.close();
-        return listaCapitoli;
+        return capitoli;
+    }
+
+
+    public void aggiornaHaEsercizi(int capitoloId, int haEsercizi) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("ha_esercizi", haEsercizi);
+        db.update("capitoli", values, "id = ?", new String[]{String.valueOf(capitoloId)});
+    }
+
+    public void aggiornaEserciziFatti(int capitoloId, int eserciziFatti) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("esercizi_fatti", eserciziFatti);
+        db.update("capitoli", values, "id = ?", new String[]{String.valueOf(capitoloId)});
     }
 
     public List<Materia> getMaterie() {
@@ -171,4 +196,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return lista;
     }
+
+    public void resetDatabase() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS Capitoli");
+        db.execSQL("DROP TABLE IF EXISTS Materie");
+        db.execSQL("CREATE TABLE Materie (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT)");
+        db.execSQL("CREATE TABLE Capitoli (id INTEGER PRIMARY KEY AUTOINCREMENT, materia_id INTEGER, nome TEXT, stato INTEGER, ha_esercizi INTEGER DEFAULT 0, esercizi_fatti INTEGER DEFAULT 0, FOREIGN KEY(materia_id) REFERENCES Materie(id))");
+    }
+
+    // Conta esercizi da fare (ha_esercizi == 1 AND esercizi_fatti == 0)
+    public int contaEserciziDaFare(int materiaId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM Capitoli WHERE materia_id = ? AND ha_esercizi = 1 AND esercizi_fatti = 0", new String[]{String.valueOf(materiaId)});
+        int count = 0;
+        if (cursor.moveToFirst()) count = cursor.getInt(0);
+        cursor.close();
+        return count;
+    }
+
+    // Conta esercizi fatti (ha_esercizi == 1 AND esercizi_fatti == 1)
+    public int contaEserciziFatti(int materiaId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM Capitoli WHERE materia_id = ? AND ha_esercizi = 1 AND esercizi_fatti = 1", new String[]{String.valueOf(materiaId)});
+        int count = 0;
+        if (cursor.moveToFirst()) count = cursor.getInt(0);
+        cursor.close();
+        return count;
+    }
+
 }

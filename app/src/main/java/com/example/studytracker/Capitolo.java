@@ -5,6 +5,8 @@ public class Capitolo {
     private int materiaId;
     private String nome;
     private int stato;
+    private int haEsercizi;
+    private int eserciziFatti;
 
     // ▶️ Stati capitolo (puoi usarli come costanti per evitare errori nei numeri magic)
     public static final int STATO_NON_FATTO = 0;
@@ -26,6 +28,20 @@ public class Capitolo {
         this.nome = nome;
         this.stato = stato;
     }
+
+    public Capitolo(int id, String nome, int stato, int haEsercizi, int eserciziFatti) {
+        this.id = id;
+        this.nome = nome;
+        this.stato = stato;
+        this.haEsercizi = haEsercizi;
+        this.eserciziFatti = eserciziFatti;
+    }
+
+    public int getHaEsercizi() { return haEsercizi; }
+    public void setHaEsercizi(int haEsercizi) { this.haEsercizi = haEsercizi; }
+
+    public int getEserciziFatti() { return eserciziFatti; }
+    public void setEserciziFatti(int eserciziFatti) { this.eserciziFatti = eserciziFatti; }
 
     // ✅ Getter e Setter
     public int getId() { return id; }

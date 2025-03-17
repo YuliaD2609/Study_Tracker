@@ -25,6 +25,15 @@
         android:textSize="16sp" />
 
     <ImageButton
+        android:id="@+id/eserciziIcon"
+        android:layout_width="17dp"
+        android:layout_height="18dp"
+        android:background="@drawable/img"
+        android:layout_marginRight="20dp"
+        android:contentDescription="Esercizi Capitolo"
+        android:src="@android:drawable/ic_menu_delete" />
+
+    <ImageButton
         android:id="@+id/btnEliminaCapitolo"
         android:layout_width="17dp"
         android:layout_height="18dp"

@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         dbHelper = new DatabaseHelper(this);
+        dbHelper.resetDatabase();
         listViewMaterie = findViewById(R.id.listViewMaterie);
         adapter = new MateriaAdapter(this, materieList);
         listViewMaterie.setAdapter(adapter);
